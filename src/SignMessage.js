@@ -31,66 +31,69 @@ export default function SignMessage() {
 
   const handleSign = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.target);
-    setError();
-    const sig = await signMessage({
-      setError,
-      message: data.get("message")
-    });
-    if (sig) {
-      setSignatures([...signatures, sig]);
-    }
+    console.log("Handler called!");
+      const _status = document.getElementById('status');
+    console.log("Handler called 2!");
+      const output = document.getElementById('output');
+    console.log("Handler called 3!");
+      if (window.FileList && window.File && window.FileReader) {
+    console.log("Handler called 4!");
+        document.getElementById('file-selector').addEventListener('input', e => {
+    console.log("Handler called 5!");
+          output.innerText = '';
+          _status.innerText = '';
+          const file = e.target.files[0];
+          if (!file.type) {
+            _status.innerText = 'Error: The File.type property does not appear to be supported on this browser.';
+            return;
+          }
+          output.innerText = file.size;
+          const reader = new FileReader();
+	  reader.addEventListener('load', event => { 
+		  
+	  });
+	  reader.readAsText(file);
+        }); 
+    	console.log("No file change?!");
+      } else {
+    	console.log("No file selected?!");
+      }
   };
+    const handleFileInput = async (e) => {
+  	const file = e.target.files[0];
+  	if (file.size > 1024) {
+    		console.log("File size cannot exceed more than 1MB");
+  	} else {
+    		console.log("File size below 1MB");
+      		const status = document.getElementById('status');
+      		const output = document.getElementById('output');
+      		const signature = document.getElementById('signature');
+          	status.textContent = file.size;
+          	output.textContent = file.size;
+            	//status.textContent = 'Error: The File.type property does not appear to be supported on this browser.';
+
+		  async function handleFile(){
+			output.innerText = event.target.result;
+			const sig = await signMessage({ setError: console.log, message :  event.target.result });
+			signature.innerText = sig.signature;
+		  }
+		  const reader = new FileReader();
+		  reader.addEventListener('load', handleFile);
+		  reader.readAsText(file);
+	}
+    }
 
   return (
-    <form className="m-4" onSubmit={handleSign}>
-      <div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white">
-        <main className="mt-4 p-4">
-          <h1 className="text-xl font-semibold text-gray-700 text-center">
-            Sign messages
-          </h1>
-          <div className="">
-            <div className="my-3">
-              <textarea
-                required
-                type="text"
-                name="message"
-                className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
-                placeholder="Message"
-              />
-            </div>
-          </div>
-        </main>
-        <footer className="p-4">
-          <button
-            type="submit"
-            className="btn btn-primary submit-button focus:ring focus:outline-none w-full"
-          >
-            Sign message
-          </button>
-          <ErrorMessage message={error} />
-        </footer>
-        {signatures.map((sig, idx) => {
-          return (
-            <div className="p-2" key={sig}>
-              <div className="my-3">
-                <p>
-                  Message {idx + 1}: {sig.message}
-                </p>
-                <p>Signer: {sig.address}</p>
-                <textarea
-                  type="text"
-                  readOnly
-                  ref={resultBox}
-                  className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
-                  placeholder="Generated signature"
-                  value={sig.signature}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </form>
+    <div>
+    <h1>
+      Read an image file
+    </h1>
+    <input type="file" id="file-selector" onChange={handleFileInput} />
+    <p id="status"></p>
+    <div>
+      <p id="output"></p>
+      <p id="signature"></p>
+    </div>
+    </div>
   );
 }
