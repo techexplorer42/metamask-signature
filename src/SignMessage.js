@@ -61,39 +61,37 @@ export default function SignMessage() {
   };
     const handleFileInput = async (e) => {
   	const file = e.target.files[0];
-  	if (file.size > 1024) {
-    		console.log("File size cannot exceed more than 1MB");
-  	} else {
-    		console.log("File size below 1MB");
-      		const status = document.getElementById('status');
-      		const output = document.getElementById('output');
-      		const signature = document.getElementById('signature');
-          	status.textContent = file.size;
-          	output.textContent = file.size;
-            	//status.textContent = 'Error: The File.type property does not appear to be supported on this browser.';
+	console.log("File handling");
+	const status = document.getElementById('status');
+	const output = document.getElementById('output');
+	const signature = document.getElementById('signature');
+	status.textContent = "Loaded file size is: "+file.size;
+	//status.textContent = 'Error: The File.type property does not appear to be supported on this browser.';
 
-		  async function handleFile(){
-			output.innerText = event.target.result;
-			const sig = await signMessage({ setError: console.log, message :  event.target.result });
-			signature.innerText = sig.signature;
-		  }
-		  const reader = new FileReader();
-		  reader.addEventListener('load', handleFile);
-		  reader.readAsText(file);
-	}
+	  async function handleFile(){
+		output.innerText = event.target.result;
+		const sig = await signMessage({ setError: console.log, message :  event.target.result });
+		signature.innerText = sig.signature;
+	  }
+	  const reader = new FileReader();
+	  reader.addEventListener('load', handleFile);
+	  reader.readAsText(file);
     }
 
   return (
-    <div>
-    <h1>
-      Read an image file
-    </h1>
-    <input type="file" id="file-selector" onChange={handleFileInput} />
+    <div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white">
+        <main className="mt-4 p-4">
+          <h1 className="text-xl font-semibold text-gray-700 text-center">
+            Sign a file
+          </h1>
+	</main>
+    <input className="btn btn-primary submit-button focus:ring focus:outline-none w-full" color="black" type="file" id="file-selector" onChange={handleFileInput} />
     <p id="status"></p>
     <div>
       <p id="output"></p>
       <p id="signature"></p>
     </div>
     </div>
+
   );
 }

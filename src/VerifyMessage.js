@@ -20,24 +20,41 @@ const verifyMessage = async ({ message, address, signature }) => {
 export default function VerifyMessage() {
   const [error, setError] = useState();
   const [successMsg, setSuccessMsg] = useState();
+  var fileblob;
+    const handleFileInputVerify = async (e) => {
+  	const file = e.target.files[0];
+	console.log("File handling");
+	const verifyfilestatus = document.getElementById('verifyfilestatus');
+	verifyfilestatus.textContent = "Loaded file size is: "+file.size;
+	fileblob = file;
+	//verifyfilestatus.textContent = 'Error: The File.type property does not appear to be supported on this browser.';
+    }
 
   const handleVerification = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
     setSuccessMsg();
     setError();
+
+
+  async function handleFile(){
     const isValid = await verifyMessage({
       setError,
-      message: data.get("message"),
+      message: event.target.result,
       address: data.get("address"),
       signature: data.get("signature")
     });
-
     if (isValid) {
       setSuccessMsg("Signature is valid!");
     } else {
       setError("Invalid signature");
     }
+  }
+  const reader = new FileReader();
+  reader.addEventListener('load', handleFile);
+  reader.readAsText(fileblob);
+
+
   };
 
   return (
@@ -49,13 +66,8 @@ export default function VerifyMessage() {
           </h1>
           <div className="">
             <div className="my-3">
-              <textarea
-                required
-                type="text"
-                name="message"
-                className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
-                placeholder="Message"
-              />
+    		<input className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none" type="file" id="file-selector" onChange={handleFileInputVerify} />
+    		<p id="verifyfilestatus"></p>
             </div>
             <div className="my-3">
               <textarea
