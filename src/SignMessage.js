@@ -1,14 +1,22 @@
 import { useState, useRef } from "react";
 import { ethers } from "ethers";
 import ErrorMessage from "./ErrorMessage";
+import JSZip from 'jszip';
+import FileSaver from 'file-saver';
 
 const signMessage = async ({ setError, message }) => {
   try {
     console.log({ message });
     if (!window.ethereum)
       throw new Error("No crypto wallet found. Please install it.");
-
-    await window.ethereum.send("eth_requestAccounts");
+    // ("eth_requestAccounts");
+    await window.ethereum.request ({ method: 'eth_requestAccounts'}).then((result) => {
+    // The result varies by RPC method.
+    // For example, this method will return a transaction hash hexadecimal string on success.
+  })
+  .catch((error) => {
+    // If the request fails, the Promise will reject with an error.
+  });
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const signature = await signer.signMessage(message);
@@ -29,49 +37,28 @@ export default function SignMessage() {
   const [signatures, setSignatures] = useState([]);
   const [error, setError] = useState();
 
-  const handleSign = async (e) => {
-    e.preventDefault();
-    console.log("Handler called!");
-      const _status = document.getElementById('status');
-    console.log("Handler called 2!");
-      const output = document.getElementById('output');
-    console.log("Handler called 3!");
-      if (window.FileList && window.File && window.FileReader) {
-    console.log("Handler called 4!");
-        document.getElementById('file-selector').addEventListener('input', e => {
-    console.log("Handler called 5!");
-          output.innerText = '';
-          _status.innerText = '';
-          const file = e.target.files[0];
-          if (!file.type) {
-            _status.innerText = 'Error: The File.type property does not appear to be supported on this browser.';
-            return;
-          }
-          output.innerText = file.size;
-          const reader = new FileReader();
-	  reader.addEventListener('load', event => { 
-		  
-	  });
-	  reader.readAsText(file);
-        }); 
-    	console.log("No file change?!");
-      } else {
-    	console.log("No file selected?!");
-      }
-  };
     const handleFileInput = async (e) => {
   	const file = e.target.files[0];
 	console.log("File handling");
+	console.log(Object.keys(file));
 	const status = document.getElementById('status');
 	const output = document.getElementById('output');
 	const signature = document.getElementById('signature');
 	status.textContent = "Loaded file size is: "+file.size;
-	//status.textContent = 'Error: The File.type property does not appear to be supported on this browser.';
 
 	  async function handleFile(){
-		output.innerText = event.target.result;
-		const sig = await signMessage({ setError: console.log, message :  event.target.result });
+		const fileContent = event.target.result;
+		output.innerText = fileContent;
+		const sig = await signMessage({ setError: console.log, message :  fileContent });
 		signature.innerText = sig.signature;
+
+		const zip = new JSZip();
+		zip.file('document.pdf', fileContent);
+		zip.file('signature.txt', sig.signature);
+		zip.file('address.txt', sig.address);
+		zip.generateAsync({ type: 'blob' }).then(function (content) {
+		    FileSaver.saveAs(content, 'signed_document.zip');
+	    	});
 	  }
 	  const reader = new FileReader();
 	  reader.addEventListener('load', handleFile);
