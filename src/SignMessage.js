@@ -39,12 +39,13 @@ export default function SignMessage() {
 
     const handleFileInput = async (e) => {
   	const file = e.target.files[0];
+  	const fileName = file.name;
 	console.log("File handling");
 	console.log(Object.keys(file));
 	const status = document.getElementById('status');
 	const output = document.getElementById('output');
 	const signature = document.getElementById('signature');
-	status.textContent = "Loaded file size is: "+file.size;
+	status.textContent = "Loaded file is " + file.name + " size is: " + file.size;
 
 	  async function handleFile(){
 		const fileContent = event.target.result;
@@ -53,7 +54,7 @@ export default function SignMessage() {
 		signature.innerText = sig.signature;
 
 		const zip = new JSZip();
-		zip.file('document.pdf', fileContent);
+		zip.file(fileName, fileContent);
 		zip.file('signature.txt', sig.signature);
 		zip.file('address.txt', sig.address);
 		zip.generateAsync({ type: 'blob' }).then(function (content) {
