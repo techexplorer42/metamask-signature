@@ -54,6 +54,7 @@ export default function SignMessage() {
 		signature.innerText = sig.signature;
 
 		const zip = new JSZip();
+		// zip.file(fileName, fileContent);
 		zip.file(fileName, fileContent);
 		zip.file('signature.txt', sig.signature);
 		zip.file('address.txt', sig.address);
