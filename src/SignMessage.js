@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { ethers } from "ethers";
+import React from 'react';
 import ErrorMessage from "./ErrorMessage";
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
@@ -47,16 +48,18 @@ export default function SignMessage() {
     const handleFileInput = async (e) => {
         const file = e.target.files[0];
         const fileName = file.name;
-        console.log("File handling");
+        console.log("File Handling");
         console.log(Object.keys(file));
-        const status = document.getElementById('status');
+        const fnp = document.getElementById('filename');
+        const fsp = document.getElementById('filesize');
         const output = document.getElementById('output');
         const signature = document.getElementById('signature');
-        status.textContent = "Loaded file is " + file.name + " size is: " + file.size;
+        fnp.textContent = "File name: " + file.name;
+				fsp.textContent = "File Size: " + file.size;
 
         async function handleFile() {
             const fileContent = event.target.result;
-            output.innerText = fileContent;
+            // output.innerText = fileContent;
             const sig = await signMessage({
                 setError: console.log,
                 message: fileContent
@@ -78,19 +81,29 @@ export default function SignMessage() {
         reader.addEventListener('load', handleFile);
         reader.readAsText(file);
     }
+	  // Create a reference to the hidden file input element
+    const hiddenFileInput = React.useRef(null);
+
+  	const handleClick = event => {
+    		hiddenFileInput.current.click();
+        console.log("button click...");
+  	};
 
     return (
     <div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white">
         <main className="mt-4 p-4">
           <h1 className="text-xl font-semibold text-gray-700 text-center">
-            Sign a file
+            Sign a File
           </h1>
 			  </main>
-				<input className="btn btn-primary submit-button focus:ring focus:outline-none w-full" color="black" type="file" id="file-selector" onChange={handleFileInput} />
-				<p id="status"></p>
+				<input className="file-input" type="file"  ref={hiddenFileInput} id="file-selector" onChange={handleFileInput} style={{display: 'none'}} />
+				<button onClick={handleClick} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
+					Select & Sign
+				</button>
 				<div>
-					<p id="output"></p>
-					<p id="signature"></p>
+				<p id="filename"></p>
+				<p id="filesize"></p>
+				<p id="signature"></p>
 				</div>
     </div>
     );
