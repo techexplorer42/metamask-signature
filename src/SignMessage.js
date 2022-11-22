@@ -5,6 +5,12 @@ import ErrorMessage from "./ErrorMessage";
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 
+const { createHash } = require('crypto');
+
+function hash(string) {
+  return createHash('sha256').update(string).digest('hex');
+}
+
 const signMessage = async ({
     setError,
     message
@@ -41,11 +47,11 @@ const signMessage = async ({
 };
 
 export default function SignMessage() {
-    const resultBox = useRef();
     const [signatures, setSignatures] = useState([]);
     const [error, setError] = useState();
 
     const handleFileInput = async (e) => {
+        console.log("handleFileInput ...");
         const file = e.target.files[0];
         const fileName = file.name;
         console.log("File Handling");
@@ -59,15 +65,14 @@ export default function SignMessage() {
 
         async function handleFile() {
             const fileContent = event.target.result;
-            // output.innerText = fileContent;
+						const fileHash = hash(fileContent);
             const sig = await signMessage({
                 setError: console.log,
-                message: fileContent
+                message: fileHash
             });
             signature.innerText = sig.signature;
 
             const zip = new JSZip();
-            // zip.file(fileName, fileContent);
             zip.file(fileName, fileContent);
             zip.file('signature.txt', sig.signature);
             zip.file('address.txt', sig.address);

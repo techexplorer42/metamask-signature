@@ -5,6 +5,11 @@ import SuccessMessage from "./SuccessMessage";
 import React from 'react';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
+const { createHash } = require('crypto');
+
+function hash(string) {
+  return createHash('sha256').update(string).digest('hex');
+}
 
 const verifyMessage = async ({
     message,
@@ -66,12 +71,13 @@ export default function VerifyMessage() {
                 var signature = 'sig';
                 signature = await zip.file(fileSignature).async("text");
                 doc = await zip.file(fileDoc).async("text");
+								const docHash = hash(doc);
                 addr = await zip.file(fileAddr).async("text");
         				verifyfilesize.textContent = "File size: " + doc.length;
         				verifyfilesignature.textContent = "Signer Address: " + addr;
                 const isValid = await verifyMessage({
                     setError,
-                    message: doc,
+                    message: docHash,
                     address: addr,
                     signature: signature
                 });
