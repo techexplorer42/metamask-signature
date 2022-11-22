@@ -100,10 +100,10 @@ export default function SignMessage() {
 				<button onClick={handleClick} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
 					Select & Sign
 				</button>
-				<div>
+				<div >
 				<p id="filename"></p>
 				<p id="filesize"></p>
-				<p id="signature"></p>
+				<div className="flex-wrap" id="signature"></div>
 				</div>
     </div>
     );
