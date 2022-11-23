@@ -38,8 +38,8 @@ export default function VerifyMessage() {
     		var fileblob;
         const file = e.target.files[0];
         const verifyfilename = document.getElementById('verifyfilename');
-        const verifyfilesize = document.getElementById('verifyfilesize');
         const verifyfilesignature = document.getElementById('verifyfilesignature');
+        const verifyfilehash = document.getElementById('verifyfilehash');
         fileblob = file;
         setSuccessMsg();
         setError();
@@ -65,7 +65,7 @@ export default function VerifyMessage() {
                     setError("This archive does not contain 3 files as expected!");
 										return;
                 }
-        				verifyfilename.textContent = "File name: " + fileDoc;
+        				verifyfilename.textContent = "File Name: " + fileDoc;
                 var doc = 'doc';
                 var addr = 'add';
                 var signature = 'sig';
@@ -73,8 +73,8 @@ export default function VerifyMessage() {
                 doc = await zip.file(fileDoc).async("text");
 								const docHash = hash(doc);
                 addr = await zip.file(fileAddr).async("text");
-        				verifyfilesize.textContent = "File size: " + doc.length;
         				verifyfilesignature.textContent = "Signer Address: " + addr;
+        				verifyfilehash.textContent = "File Hash: " + docHash;
                 const isValid = await verifyMessage({
                     setError,
                     message: docHash,
@@ -110,7 +110,7 @@ export default function VerifyMessage() {
 					</button>
   				<div>
 						<p id="verifyfilename"></p>
-						<p id="verifyfilesize"></p>
+						<p id="verifyfilehash"></p>
 						<p id="verifyfilesignature"></p>
 						<ErrorMessage message={error} />
 						<SuccessMessage message={successMsg} />

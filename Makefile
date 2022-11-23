@@ -7,3 +7,5 @@ build:
 
 install:
 	npm install
+
+.PHONY: build

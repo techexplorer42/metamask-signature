@@ -49,28 +49,27 @@ const signMessage = async ({
 export default function SignMessage() {
     const [signatures, setSignatures] = useState([]);
     const [error, setError] = useState();
+    var file = null;
+    var fileName = name;
 
     const handleFileInput = async (e) => {
         console.log("handleFileInput ...");
-        const file = e.target.files[0];
-        const fileName = file.name;
+        file = e.target.files[0];
+        fileName = file.name;
         console.log("File Handling");
         console.log(Object.keys(file));
         const fnp = document.getElementById('filename');
-        const fsp = document.getElementById('filesize');
-        const output = document.getElementById('output');
-        const signature = document.getElementById('signature');
-        fnp.textContent = "File name: " + file.name;
-				fsp.textContent = "File Size: " + file.size;
+        const fhs = document.getElementById('filehash');
+        fnp.textContent = "File Name: " + file.name;
 
         async function handleFile() {
             const fileContent = event.target.result;
 						const fileHash = hash(fileContent);
+						fhs.textContent = "File Hash: " + fileHash;
             const sig = await signMessage({
                 setError: console.log,
                 message: fileHash
             });
-            signature.innerText = sig.signature;
 
             const zip = new JSZip();
             zip.file(fileName, fileContent);
@@ -79,9 +78,11 @@ export default function SignMessage() {
             zip.generateAsync({
                 type: 'blob'
             }).then(function(content) {
-                FileSaver.saveAs(content, 'signed_document.zip');
+								var resultContent = content;
+                FileSaver.saveAs(resultContent, fileName + '.zip');
             });
         }
+
         const reader = new FileReader();
         reader.addEventListener('load', handleFile);
         reader.readAsText(file);
@@ -91,7 +92,6 @@ export default function SignMessage() {
 
   	const handleClick = event => {
     		hiddenFileInput.current.click();
-        console.log("button click...");
   	};
 
     return (
@@ -107,8 +107,7 @@ export default function SignMessage() {
 				</button>
 				<div >
 				<p id="filename"></p>
-				<p id="filesize"></p>
-				<div className="flex-wrap" id="signature"></div>
+				<p id="filehash"></p>
 				</div>
     </div>
     );

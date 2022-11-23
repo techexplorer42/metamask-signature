@@ -1,5 +1,6 @@
 all:
 	make -C ../ build
+	rm -rf ./build
 	cp -r ../build .
 	heroku container:push web -a signmepls
 	heroku container:release web -a signmepls
