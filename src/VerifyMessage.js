@@ -5,7 +5,7 @@ import SuccessMessage from "./SuccessMessage";
 import React from 'react';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
-import ParseMetadata from "./Metadata";
+import { ParseMetadata } from "./Metadata";
 const { createHash } = require('crypto');
 
 function hash(string) {
@@ -75,20 +75,23 @@ export default function VerifyMessage() {
 								var docHash;
 								docHash = hash(doc);
 								// extract signature and address (parse json then put in variables)
-								const signInfo = JSON.parse(signDoc); //FIXME: ParseMetadata fail
-                var addr;
-                var signature;
-                addr = signInfo.signer;
-                signature = signInfo.signature;
-        				verifyfilesignature.textContent = "Signer Address: " + addr;
-        				verifyfilehash.textContent = "File Hash: " + docHash;
-                const isValid = await verifyMessage({
-                    setError,
-                    message: docHash,
-                    address: addr,
-                    signature: signature
-                });
-
+								const signInfo = ParseMetadata(signDoc);
+								//check signature
+								var isValid = false;
+								if (signInfo) {
+									var addr;
+									var signature;
+									addr = signInfo.signer;
+									signature = signInfo.signature;
+									verifyfilesignature.textContent = "Signer Address: " + addr;
+									verifyfilehash.textContent = "File Hash: " + docHash;
+									isValid = await verifyMessage({
+											setError,
+											message: docHash,
+											address: addr,
+											signature: signature
+									});
+								}
                 if (isValid) {
                     setSuccessMsg("Signature is valid!");
                 } else {
