@@ -5,6 +5,7 @@ import SuccessMessage from "./SuccessMessage";
 import React from 'react';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
+import ParseMetadata from "./Metadata";
 const { createHash } = require('crypto');
 
 function hash(string) {
@@ -48,31 +49,37 @@ export default function VerifyMessage() {
         zip.loadAsync(fileblob)
             .then(async function(zip) {
                 var zfiles = zip.files;
-                var fileSignature = "signature.txt";
+                var fileSignature = "signature.json";
                 var fileDoc = "";
-                var fileAddr = "address.txt";
                 //console.log(zfiles);
 								var fNum = 0;
                 zip.forEach((relPath, file) => {
-                    if (relPath != fileAddr && relPath != fileSignature) {
+                    if (relPath != fileSignature) {
                         fileDoc = relPath;
                     }
 										fNum += 1;
                 });
                 // TODO check that fileSignature and fileAddr exists
-                if (fNum != 3) {
+                if (fNum != 2) {
                     console.log("there is more or less (" + fNum + ") than 3 files");
                     setError("This archive does not contain 3 files as expected!");
 										return;
                 }
         				verifyfilename.textContent = "File Name: " + fileDoc;
-                var doc = 'doc';
-                var addr = 'add';
-                var signature = 'sig';
-                signature = await zip.file(fileSignature).async("text");
+								// file content goes here
+                var doc;
+                var signDoc;
                 doc = await zip.file(fileDoc).async("text");
-								const docHash = hash(doc);
-                addr = await zip.file(fileAddr).async("text");
+                signDoc = await zip.file(fileSignature).async("text");
+								// Generate the hash of the document
+								var docHash;
+								docHash = hash(doc);
+								// extract signature and address (parse json then put in variables)
+								const signInfo = JSON.parse(signDoc); //FIXME: ParseMetadata fail
+                var addr;
+                var signature;
+                addr = signInfo.signer;
+                signature = signInfo.signature;
         				verifyfilesignature.textContent = "Signer Address: " + addr;
         				verifyfilehash.textContent = "File Hash: " + docHash;
                 const isValid = await verifyMessage({

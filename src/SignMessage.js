@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { ethers } from "ethers";
 import React from 'react';
 import ErrorMessage from "./ErrorMessage";
+import GenMetadata from "./Metadata";
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 
@@ -71,10 +72,10 @@ export default function SignMessage() {
                 message: fileHash
             });
 
+						const metadata = GenMetadata(sig.address,sig.signature);
             const zip = new JSZip();
             zip.file(fileName, fileContent);
-            zip.file('signature.txt', sig.signature);
-            zip.file('address.txt', sig.address);
+            zip.file('signature.json', metadata);
             zip.generateAsync({
                 type: 'blob'
             }).then(function(content) {
