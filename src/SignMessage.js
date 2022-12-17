@@ -35,7 +35,10 @@ const signMessage = async ({
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const signature = await signer.signMessage(message);
-        const address = await signer.getAddress();
+        //const addresses = await signer.getSigners();
+        //const address = addresses[0];
+        const address = await signer.getAddress(); 
+				console.log("address:", address);
 
         return {
             message,
@@ -54,14 +57,20 @@ export default function SignMessage() {
     var fileName = name;
 
     const handleFileInput = async (e) => {
-        console.log("handleFileInput ...");
         file = e.target.files[0];
         fileName = file.name;
-        console.log("File Handling");
-        console.log(Object.keys(file));
         const fnp = document.getElementById('filename');
+        fnp.textContent = "Uploaded File: " + fileName;
+
+    }
+
+    const handleSign = async (e) => {
+        if (!file ) {
+						console.log("Please Select a file");
+						return;
+				}
+        fileName = file.name;
         const fhs = document.getElementById('filehash');
-        fnp.textContent = "File Name: " + file.name;
 
         async function handleFile() {
             const fileContent = event.target.result;
@@ -102,13 +111,18 @@ export default function SignMessage() {
             Sign a File
           </h1>
 			  </main>
-				<input className="file-input" type="file"  ref={hiddenFileInput} id="file-selector" onChange={handleFileInput} style={{display: 'none'}} />
-				<button onClick={handleClick} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
-					Select & Sign
-				</button>
-				<div >
-				<p id="filename"></p>
-				<p id="filehash"></p>
+				<div className="mt-2 p-2">
+					<input className="file-input" type="file"  ref={hiddenFileInput} id="file-selector" onChange={handleFileInput} style={{display: 'none'}} />
+					<button onClick={handleClick} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
+						Upload
+					</button>
+					<p id="filename"> </p>
+				</div>
+				<div className="mt-2 p-2">
+					<button onClick={handleSign} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
+						Sign
+					</button>
+					<p id="filehash"> </p>
 				</div>
     </div>
     );

@@ -114,10 +114,12 @@ export default function VerifyMessage() {
 							Verify signature
 						</h1>
 					</main>
-					<input className="file-input" type="file"  ref={hiddenFileInputVerify} id="file-selector" onChange={handleVerification} style={{display: 'none'}} />
-					<button onClick={handleClickVerify} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
-						Select & Verify
-					</button>
+				  <div className="mt-2 p-2">
+						<input className="file-input" type="file"  ref={hiddenFileInputVerify} id="file-selector" onChange={handleVerification} style={{display: 'none'}} />
+						<button onClick={handleClickVerify} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
+							Select & Verify
+						</button>
+  				</div>
   				<div>
 						<p id="verifyfilename"></p>
 						<p id="verifyfilehash"></p>
