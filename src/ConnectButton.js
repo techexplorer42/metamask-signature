@@ -57,7 +57,7 @@ export default function ConnectStatus() {
 	}
 	return (
 		<div>
-		<button className="btn btn-primary btn-lg btn-block mb-3" id="connectButton" disabled>
+		<button className="btn btn-primary btn-lg btn-block" id="connectButton" disabled>
     	Connect
     </button>
 		</div>

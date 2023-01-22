@@ -108,7 +108,7 @@ export default function SignMessage() {
     <div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white">
         <main className="mt-4 p-4">
           <h1 className="text-xl font-semibold text-gray-700 text-center">
-            Sign a File
+            Sign Document
           </h1>
 			  </main>
 				<div className="mt-2 p-2">

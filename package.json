@@ -8,6 +8,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
+    "@metamask/detect-provider": "^2.0.0",
     "@metamask/onboarding": "^1.0.1",
     "ethers": "5.4.5",
     "file-saver": "^2.0.5",
