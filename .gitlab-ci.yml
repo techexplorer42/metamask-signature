@@ -1,9 +1,8 @@
 stages:
   - build
   - deploy
-
 build:
-  image: node:latest    
+  image: node:latest
   stage: build
   variables: 
     # Replace this with your site URL
@@ -14,7 +13,6 @@ build:
   artifacts:
     paths:
       - build/          
-
 pages:
   image: alpine:latest
   stage: deploy
