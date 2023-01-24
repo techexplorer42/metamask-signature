@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",
-    "typescript": "4.1.3" 
+    "typescript": "3.2.1" 
   },
   "scripts": {
     "start": "export PORT=8182; react-scripts start --port=8182",
