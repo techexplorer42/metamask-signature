@@ -58,13 +58,12 @@ font-family: 'Bangers', cursive;
   margin:0;
   padding:0;
 }
-body{
+html, body{
   font-size:17px;
   color:#424242;
   font-family: 'Open Sans', sans-serif;
   background-color: #ffffff;
   background-image: url("https://www.transparenttextures.com/patterns/clean-gray-paper.png");
-  height: 100%;
 }
 html, body, #app, #app>div {
    min-height: 100%;

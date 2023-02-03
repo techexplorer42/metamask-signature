@@ -11,7 +11,7 @@ export default function App() {
       <div className="w-9/12">
 				<div className={styles.centerme}>
 					<center>
-            <img src="brand.png" alt="DocrySign" />
+            <img src="brand.png" alt="DocrySign" width="280"/>
 					</center>
 				</div>
 				<div className="w-3/12 absolute top-0 right-0 h-12">
