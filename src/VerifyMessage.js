@@ -38,9 +38,7 @@ export default function VerifyMessage() {
         e.preventDefault();
     		var fileblob;
         const file = e.target.files[0];
-        const verifyfilename = document.getElementById('verifyfilename');
-        const verifyfilesignature = document.getElementById('verifyfilesignature');
-        const verifyfilehash = document.getElementById('verifyfilehash');
+        const logarea = document.getElementById('logarea');
         fileblob = file;
         setSuccessMsg();
         setError();
@@ -65,7 +63,7 @@ export default function VerifyMessage() {
                     setError("This archive does not contain 3 files as expected!");
 										return;
                 }
-        				verifyfilename.textContent = "File Name: " + fileDoc;
+                logarea.value += "File Name: " + fileDoc;
 								// file content goes here
                 var doc;
                 var signDoc;
@@ -83,8 +81,8 @@ export default function VerifyMessage() {
 									var signature;
 									addr = signInfo.signer;
 									signature = signInfo.signature;
-									verifyfilesignature.textContent = "Signer Address: " + addr;
-									verifyfilehash.textContent = "File Hash: " + docHash;
+                  logarea.value += "Signer Address: " + addr + "\n";
+                  logarea.value += "File Hash: " + docHash + "\n";
 									isValid = await verifyMessage({
 											setError,
 											message: docHash,
@@ -108,7 +106,7 @@ export default function VerifyMessage() {
   	};
 
     return (
-				<div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white">
+				<div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white border border-primary h-56">
 					<main className="mt-4 p-4">
 						<h1 className="text-xl font-semibold text-gray-700 text-center">
 							Verify signature
@@ -120,10 +118,7 @@ export default function VerifyMessage() {
 							Select & Verify
 						</button>
   				</div>
-  				<div>
-						<p id="verifyfilename"></p>
-						<p id="verifyfilehash"></p>
-						<p id="verifyfilesignature"></p>
+  				<div className="h-12">
 						<ErrorMessage message={error} />
 						<SuccessMessage message={successMsg} />
 					</div>

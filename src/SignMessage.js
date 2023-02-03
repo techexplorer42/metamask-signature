@@ -5,6 +5,7 @@ import ErrorMessage from "./ErrorMessage";
 import GenMetadata from "./Metadata";
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
+import styles from "./App.css";
 
 const { createHash } = require('crypto');
 
@@ -57,11 +58,10 @@ export default function SignMessage() {
     var fileName = name;
 
     const handleFileInput = async (e) => {
+        const logarea = document.getElementById('logarea');
         file = e.target.files[0];
         fileName = file.name;
-        const fnp = document.getElementById('filename');
-        fnp.textContent = "Uploaded File: " + fileName;
-
+        logarea.value += "Uploaded File: " + fileName + "\n";
     }
 
     const handleSign = async (e) => {
@@ -70,12 +70,12 @@ export default function SignMessage() {
 						return;
 				}
         fileName = file.name;
-        const fhs = document.getElementById('filehash');
+        const logarea = document.getElementById('logarea');
 
         async function handleFile() {
             const fileContent = event.target.result;
 						const fileHash = hash(fileContent);
-						fhs.textContent = "File Hash: " + fileHash;
+            logarea.value += "File Hash: " + fileHash + "\n";
             const sig = await signMessage({
                 setError: console.log,
                 message: fileHash
@@ -105,15 +105,15 @@ export default function SignMessage() {
   	};
 
     return (
-    <div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white">
+    <div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white border border-primary h-56">
         <main className="mt-4 p-4">
           <h1 className="text-xl font-semibold text-gray-700 text-center">
-            Sign Document
+            Load & Sign
           </h1>
 			  </main>
 				<div className="mt-2 p-2">
 					<input className="file-input" type="file"  ref={hiddenFileInput} id="file-selector" onChange={handleFileInput} style={{display: 'none'}} />
-					<button onClick={handleClick} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
+					<button onClick={handleClick} type="submit" className="btn btn-primary bg-green-500 submit-button focus:ring focus:outline-none w-full">
 						Upload
 					</button>
 					<p id="filename"> </p>
@@ -122,7 +122,6 @@ export default function SignMessage() {
 					<button onClick={handleSign} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
 						Sign
 					</button>
-					<p id="filehash"> </p>
 				</div>
     </div>
     );

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import MetaMaskOnboarding from '@metamask/onboarding'
 import detectEthereumProvider from '@metamask/detect-provider';
 
@@ -38,6 +39,8 @@ function connect() {
 }
 
 export default function DonateButton() {
+    const [userAmount, setUserAmount] = useState("");
+
   	const handleDonate = async event => {
 
 				// this returns the provider, or null if it wasn't detected
@@ -70,11 +73,19 @@ export default function DonateButton() {
 					params: [transactionParameters],
 				});
   	};
+  const onInputChange = async event => {
+    if (event.target.validity.valid) {
+      setUserAmount(event.target.value);
+    }
+  };
 	return (
-		<div>
-		<button onClick={handleDonate} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
-    	Donate
-    </button>
+    <div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white border border-primary h-24">
+      <input className="input is-medium w-full" type="text" value={userAmount} pattern="[0-9]+([\.][0-9]*)?" onInput={onInputChange}
+        placeholder="Enter the amount (example 0.05)"
+      />
+      <button onClick={handleDonate} type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
+        Donate
+      </button>
 		</div>
 	)
 }

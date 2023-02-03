@@ -94,9 +94,7 @@ export default function ConnectStatus() {
 
 
 	return (
-		    <button id="connectButton"  type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full"
-            onClick={connectWallet}
-          >
+		    <button id="connectButton"  type="submit" className="btn btn-info submit-button focus:ring focus:outline-none w-full w-64 h-16" onClick={connectWallet}>
           <span className="is-link has-text-weight-bold">
             {walletAddress && walletAddress.length > 0 
               ? `Connected: ${walletAddress.substring(
