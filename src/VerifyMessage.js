@@ -7,6 +7,7 @@ import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 import { ParseMetadata } from "./Metadata";
 const { createHash } = require('crypto');
+import LogArea from "./LogArea";
 
 function hash(string) {
   return createHash('sha256').update(string).digest('hex');
@@ -63,7 +64,7 @@ export default function VerifyMessage() {
                     setError("This archive does not contain 3 files as expected!");
 										return;
                 }
-                logarea.value += "File Name: " + fileDoc;
+                //logarea.value += "File Name: " + fileDoc + "\n";
 								// file content goes here
                 var doc;
                 var signDoc;
@@ -76,13 +77,13 @@ export default function VerifyMessage() {
 								const signInfo = ParseMetadata(signDoc);
 								//check signature
 								var isValid = false;
+								var addr;
+								var signature;
+								addr = signInfo.signer;
+								signature = signInfo.signature;
 								if (signInfo) {
-									var addr;
-									var signature;
-									addr = signInfo.signer;
-									signature = signInfo.signature;
-                  logarea.value += "Signer Address: " + addr + "\n";
-                  logarea.value += "File Hash: " + docHash + "\n";
+                  //logarea.value += "File Hash: " + docHash + "\n";
+                  logarea.value += "Verifying..." + fileDoc + "\n";
 									isValid = await verifyMessage({
 											setError,
 											message: docHash,
@@ -92,8 +93,10 @@ export default function VerifyMessage() {
 								}
                 if (isValid) {
                     setSuccessMsg("Signature is valid!");
+                    logarea.value += "Valid. The Signer is: " + addr + "\n";
                 } else {
                     setError("Invalid signature");
+                    logarea.value += "Invalid Signature \n";
                 }
             })
     };
@@ -109,7 +112,7 @@ export default function VerifyMessage() {
 				<div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white border border-primary h-56">
 					<main className="mt-4 p-4">
 						<h1 className="text-xl font-semibold text-gray-700 text-center">
-							Verify signature
+							Verify Signature
 						</h1>
 					</main>
 				  <div className="mt-2 p-2">

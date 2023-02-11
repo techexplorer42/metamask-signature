@@ -1,0 +1,41 @@
+.centerme {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.title {
+  margin-top: 20px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+}
+
+.description {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #555;
+}
+
+.cta {
+  margin-top: 40px;
+  padding: 20px 40px;
+  background-color: #3f51b5;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+

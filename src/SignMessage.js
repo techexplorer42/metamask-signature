@@ -61,7 +61,7 @@ export default function SignMessage() {
         const logarea = document.getElementById('logarea');
         file = e.target.files[0];
         fileName = file.name;
-        logarea.value += "Uploaded File: " + fileName + "\n";
+        logarea.value += "Uploading: " + fileName + "\n";
     }
 
     const handleSign = async (e) => {
@@ -75,7 +75,8 @@ export default function SignMessage() {
         async function handleFile() {
             const fileContent = event.target.result;
 						const fileHash = hash(fileContent);
-            logarea.value += "File Hash: " + fileHash + "\n";
+            //logarea.value += "File Hash: " + fileHash + "\n";
+            logarea.value += "Signing...";
             const sig = await signMessage({
                 setError: console.log,
                 message: fileHash
@@ -90,6 +91,7 @@ export default function SignMessage() {
             }).then(function(content) {
 								var resultContent = content;
                 FileSaver.saveAs(resultContent, fileName + '.zip');
+                logarea.value += "Done\n";
             });
         }
 
