@@ -7,6 +7,7 @@
   transform: translate(-50%, -50%);
 }
 
+
 .button {
   background-color: #4CAF50; /* Green */
   border: none;
@@ -19,21 +20,30 @@
 }
 
 .btn-primary {
-    color: #212529;
+    color: white;
     background-color: #094790;
-    border-color: #5bc2c2
+    border-color: #fff
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
-    color: #fff;
-    background-color: #00b3ab;
-    border-color: #285e8e; /*set the color you want here*/
+    background-color: #0e5ba8;
+    border-color: #fff; /*set the color you want here*/
 }
 
 
 .border-primary {
-    border-color: #5bc2c2
+    border-color: #000
 }
+.flex-wrap-gap {
+  display: flex;
+  flex-wrap: wrap;
+  gap:  5px; /* Set the gap value to the desired amount */
+}
+
+.flex-wrap-gap > div {
+  flex: 1; /* Set the flex property to fill the available space equally */
+}
+
 
 #bottom {
   position: absolute;
@@ -58,19 +68,14 @@ font-family: 'Bangers', cursive;
   margin:0;
   padding:0;
 }
-html, body{
-  font-size:17px;
-  color:#424242;
-  font-family: 'Open Sans', sans-serif;
-  background-color: #ffffff;
-  background-image: url("https://www.transparenttextures.com/patterns/clean-gray-paper.png");
-}
 html, body, #app, #app>div {
-   min-height: 100%;
-   background-size: cover;
-   background-repeat: no-repeat;
-   background-position: center center;
+  background-color: #F2F2F2;
 }
+:root, body {
+  background-color: #F2F2F2;
+}
+
+
 h1, h2, h3, h4, h5, h6, p{
   margin:0px;
   padding:0px;

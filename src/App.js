@@ -7,22 +7,19 @@ import styles from "./App.css";
 
 export default function App() {
   return (
-    <div >
-      <div className="w-9/12">
-				<div className={styles.centerme}>
-					<center>
-            <img src="brand.png" alt="DocrySign" width="280"/>
-					</center>
-				</div>
-				<div className="w-3/12 absolute top-0 right-0 h-12">
-					 <ConnectStatus />
-				</div>
-      </div>
-
-      <div className="w-full h-12">
-			</div>
-
-      <div className="flex flex-wrap">
+    <div>
+      <nav className="flex justify-between items-center h-16 bg-gray-800 text-white">
+        <div className="ml-4">
+          <a href="/" className="text-white font-bold text-lg">
+            DocrySign
+          </a>
+        </div>
+        <div className="mr-4">
+          <ConnectStatus />
+        </div>
+      </nav>
+      <div className="w-full h-12" />
+      <div className="flex flex-wrap flex-wrap-gap">
         <div className="w-full lg:w-1/2">
           <SignMessage />
         </div>
@@ -30,18 +27,18 @@ export default function App() {
           <VerifyMessage />
         </div>
       </div>
-
       <div className="mt-2 p-2">
-          <LogArea />
+        <LogArea />
       </div>
-
       <div className="w-full h-12">
-				<center>
-				<div className="w-2/6">
-					 <DonateButton />
-				</div>
-				</center>
+        <center>
+          <div className="w-2/6">
+            <DonateButton />
+          </div>
+        </center>
       </div>
     </div>
   );
 }
+
+
