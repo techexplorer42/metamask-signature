@@ -19,7 +19,17 @@ function LandingPage() {
         <main className="landing-main">
           <p className="landing-subtitle" style={{ color: '#094790' }}>Sign any document using a web3 wallet extension such as Metamask</p>
           <div className="disclaimer-box">
-            <p className="disclaimer-text" style={{ color: '#094790' }}>Disclaimer: This is a beta version of the website and we are not responsible for any crypto funds lost. There is no guarantee of the website's functioning. This is an amateur website.</p>
+            <p className="disclaimer-text" style={{ color: '#094790' }}>
+            <b> Disclaimer: </b> This website is currently in beta testing and may contain errors or inaccuracies. We do not guarantee the accuracy, completeness, or suitability of the information provided on this website, and we accept no liability for any loss or damage arising from the use of this website or its contents. 
+            <br/>
+            We also cannot guarantee the functionality of the website, as it is still in development and may experience technical issues or downtime.
+            <br/>
+            Please be aware that this website is intended for informational purposes only and is not intended to provide legal, financial, or investment advice. Any decisions made based on the information provided on this website are made at your own risk.
+            <br/>
+            Additionally, we are not responsible for any loss of funds or other damages that may result from your use of this website or its contents.
+            <br/>
+            Finally, please note that this website is not a professional or licensed service, and is not intended to replace the advice of a qualified professional.
+            </p>
           </div>
           <div className="w-full h-6"> </div>
           <button onClick={() => setShowApp(true)} className="landing-cta btn btn-primary submit-button focus:ring focus:outline-none" style={{ backgroundColor: '#094790', color: 'white' }}>
