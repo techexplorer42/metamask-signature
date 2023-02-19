@@ -1,65 +1,111 @@
 import MetaMaskOnboarding from '@metamask/onboarding'
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
 
 export default function ConnectStatus() {
-  const currentUrl = new URL(window.location.href)
-  //Created check function to see if the MetaMask extension is installed
-  const isMetaMaskInstalled = () => {
-    //Have to check the ethereum binding on the window object to see if it's installed
-    const { ethereum } = window;
-		console.log(ethereum);
-		console.log(ethereum.isMetaMask);
-		console.log(MetaMaskOnboarding.isMetaMaskInstalled());
-    return Boolean(ethereum && ethereum.isMetaMask);
-  };
-  const MetaMaskClientCheck = () => {
-  	const onboardButton = document.getElementById('connectButton');
-    //Now we check to see if MetaMask is installed
-    if (!isMetaMaskInstalled()) {
-      //If it isn't installed we ask the user to click to install it
-      onboardButton.innerText = 'Click here to install MetaMask!';
-			//When the button is clicked we call this function
-			onboardButton.onclick = onClickInstall;
-			//The button is now disabled
-			onboardButton.disabled = false;
+  const [walletAddress, setWalletAddress] = useState("");
+  const [walletChainId, setWalletChainId] = useState("");
+  const [userAmount, setUserAmount] = useState("");
+
+  useEffect(() => {
+    getCurrentWalletConnected();
+    addWalletListener();
+  }, [walletAddress, walletChainId]);
+
+  const connectWallet = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      try {
+        /* MetaMask is installed */
+        /* fetch account */
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setWalletAddress(accounts[0]);
+        console.log(accounts[0]);
+        /* fetch chainId */
+        const chainId = await window.ethereum.request({
+          method: 'eth_chainId'
+        });
+        setWalletChainId(chainId);
+        console.log(chainId);
+      } catch (err) {
+        console.error(err.message);
+      }
     } else {
-      //If it is installed we change our button text
-      onboardButton.innerText = 'Connect';
-			//When the button is clicked we call this function to connect the users MetaMask Wallet
-			onboardButton.onclick = onClickConnect;
-			//The button is now enabled
-			onboardButton.disabled = false;
+      /* MetaMask is not installed */
+      console.log("Please install MetaMask");
     }
   };
-	//This will start the onboarding proccess
-	const onClickInstall = () => {
-  	//We create a new MetaMask onboarding object to use in our app
-		const onboarding = new MetaMaskOnboarding();
 
-  	const onboardButton = document.getElementById('connectButton');
-		onboardButton.innerText = 'Onboarding in progress';
-		onboardButton.disabled = true;
-		//On this object we have startOnboarding which will start the onboarding process for our end user
-		onboarding.startOnboarding();
-	};
+  const getCurrentWalletConnected = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_accounts",
+        });
+        if (accounts.length > 0) {
+          setWalletAddress(accounts[0]);
+          console.log(accounts[0]);
+        } else {
+          console.log("Connect to MetaMask using the Connect button");
+          return;
+        }
+        /* fetch chainId */
+        const chainId = await window.ethereum.request({
+          method: 'eth_chainId'
+        });
+        if (chainId.length > 0) { /* if we are here, should be always true!? */
+          setWalletChainId(chainId);
+          console.log(chainId);
+        } else {
+          console.log("Connect to MetaMask using the Connect button");
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    } else {
+      /* MetaMask is not installed */
+      console.log("Please install MetaMask");
+    }
+  };
 
-	const onClickConnect = async () => {
-		try {
-			// Will open the MetaMask UI
-			// You should disable this button while the request is pending!
-			await ethereum.request({ method: 'eth_requestAccounts' });
-		} catch (error) {
-			console.error(error);
-		}
-	};
+  const addWalletListener = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      window.ethereum.on("accountsChanged", (accounts) => {
+        setWalletAddress(accounts[0]);
+        console.log(accounts[0]);
+      });
+      window.ethereum.on("chainChanged", (chainId) => {
+        setWalletAddress(chainId);
+        console.log(chainId);
+      });
+    } else {
+      /* MetaMask is not installed */
+      setWalletAddress("");
+      console.log("Please install MetaMask");
+    }
+  };
 
-	window.onload = function () {
-		MetaMaskClientCheck();
-	}
+  const onInputChange = async event => {
+    if (event.target.validity.valid) {
+      setUserAmount(event.target.value);
+    }
+  };
+
+
 	return (
-		<div>
-		<button className="btn btn-primary btn-lg btn-block" id="connectButton" disabled>
-    	Connect
-    </button>
-		</div>
+		    <button id="connectButton"  type="submit" className="btn btn-primary submit-button focus:ring focus:outline-none w-full w-64 h-16" onClick={connectWallet}>
+          <span className="is-link has-text-weight-bold">
+            {walletAddress && walletAddress.length > 0 
+              ? `Connected: ${walletAddress.substring(
+                  0,
+                  6
+                )}...${walletAddress.substring(38)}`
+              : "Connect Wallet"}
+            { walletAddress && walletAddress.length > 0  &&  walletChainId && walletChainId.length > 0
+              ? ` (${walletChainId})`
+              : ""}
+          </span>
+        </button>
 	)
 }

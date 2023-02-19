@@ -1,6 +1,6 @@
 import SignMessage from "./SignMessage";
 import VerifyMessage from "./VerifyMessage";
-import ConnectStatus from "./ConnectButton3";
+import ConnectStatus from "./ConnectButton";
 import DonateButton from "./DonateButton";
 import LogArea from "./LogArea";
 import styles from "./App.css";
