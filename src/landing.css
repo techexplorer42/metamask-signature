@@ -18,6 +18,13 @@
   color: #555;
 }
 
+footer {
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+}
+
 #box {
   background-color: #094790;
   border-radius: 20px;

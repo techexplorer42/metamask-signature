@@ -37,6 +37,15 @@ export default function App() {
           </div>
         </center>
       </div>
+      <div className="w-full h-16"> </div>
+      <div className="w-full items-center h-16 bg-gray-800 text-white">
+        <center>
+          <p className="text-white font-bold">
+            Contact us on Twitter at <a href="https://twitter.com/docrysign" target="_blank" rel="noopener noreferrer">@docrysign</a>
+          </p>
+          <p>&copy; 2023 DocrySign </p>
+        </center>
+      </div>
     </div>
   );
 }
