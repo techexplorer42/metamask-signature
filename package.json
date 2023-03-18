@@ -10,22 +10,33 @@
   "dependencies": {
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/onboarding": "^1.0.1",
+    "bip39": "^3.1.0",
+    "dotenv": "^16.0.3",
+    "ethereumjs-wallet": "^1.0.2",
     "ethers": "5.4.5",
     "express-basic-auth": "^1.2.1",
     "file-saver": "^2.0.5",
+    "hdkey": "^2.1.0",
     "jszip": "^3.10.1",
+    "npm": "^9.6.0",
+    "nvm": "^0.0.4",
     "react": "17.0.2",
+    "react-bootstrap": "^2.7.2",
     "react-dom": "17.0.2",
+    "react-icons": "^4.8.0",
     "react-router-dom": "^6.8.1",
-    "react-scripts": "4.0.0"
+    "react-scripts": "4.0.0",
+    "web3": "^1.8.2"
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",
+    "purgecss": "^5.0.0",
     "typescript": "3.2.1"
   },
   "scripts": {
     "start": "export PORT=8182; react-scripts start --port=8182",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "purgecss": "purgecss -c purgecss.config.js -o src/cleaned-css/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

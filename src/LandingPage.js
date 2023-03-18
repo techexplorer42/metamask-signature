@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
+import Footer from "./Footer";
 import App from './App';
-import './landing.css';
+import './LandingPage.css';
 
 function LandingPage() {
   const [showApp, setShowApp] = useState(false);
 
   if (!showApp) {
     return (
-      <div className="landing-page">
+      <div className="landing-page flex flex-col min-h-screen">
+        <div className="content-wrapper flex-grow pb-24">
         <header className="landing-header">
           <div id="box" className="text-white font-bold text-lg bg-gray-800">
             <center>
               <h1>DocrySign</h1>
-              <p class="small-text">Document crypto Sign</p>
+              <p className="small-text">Document crypto Sign</p>
             </center>
           </div>
         </header>
@@ -36,15 +38,8 @@ function LandingPage() {
             Launch Application
           </button>
         </main>
-          <div className="w-full h-16"> </div>
-            <div className="w-full items-center h-16 bg-gray-800 text-white">
-              <center>
-                <p className="text-white font-bold">
-                  Contact us on Twitter at <a href="https://twitter.com/docrysign" target="_blank" rel="noopener noreferrer">@docrysign</a>
-                </p>
-                <p>&copy; 2023 DocrySign </p>
-              </center>
-            </div>
+        <Footer />
+        </div>
       </div>
     );
   }

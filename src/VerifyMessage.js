@@ -5,9 +5,12 @@ import SuccessMessage from "./SuccessMessage";
 import React from 'react';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
-import { ParseMetadata } from "./Metadata";
+import { unixToISOString, ParseMetadata } from './Utils';
 const { createHash } = require('crypto');
-import LogArea from "./LogArea";
+import { checkIfSigned } from './contract';
+import styles from "./VerifyMessage.css";
+import { Logout } from './LogArea';
+import { FaInfoCircle } from 'react-icons/fa';
 
 function hash(string) {
   return createHash('sha256').update(string).digest('hex');
@@ -34,12 +37,23 @@ const verifyMessage = async ({
 export default function VerifyMessage() {
     const [error, setError] = useState();
     const [successMsg, setSuccessMsg] = useState();
+    const [showModal, setShowModal] = useState(false);
+    const iconRef = useRef(null);
+
+    const handleCloseModal = () => setShowModal(false);
+
+    const handleShowModal = () => {
+      setShowModal(prevShowModal => !prevShowModal);
+      const iconBounds = iconRef.current.getBoundingClientRect();
+      setModalPosition({ top: iconBounds.top, left: iconBounds.right + 8 });
+    };
+
+    const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
 
     const handleVerification = async (e) => {
         e.preventDefault();
     		var fileblob;
         const file = e.target.files[0];
-        const logarea = document.getElementById('logarea');
         fileblob = file;
         setSuccessMsg();
         setError();
@@ -64,7 +78,6 @@ export default function VerifyMessage() {
                     setError("This archive does not contain 3 files as expected!");
 										return;
                 }
-                //logarea.value += "File Name: " + fileDoc + "\n";
 								// file content goes here
                 var doc;
                 var signDoc;
@@ -78,12 +91,21 @@ export default function VerifyMessage() {
 								//check signature
 								var isValid = false;
 								var addr;
+                var fileHash;
 								var signature;
+								var timestamp;
 								addr = signInfo.signer;
+								fileHash = signInfo.hash;
 								signature = signInfo.signature;
+								timestamp = signInfo.timestamp;
+                const ofrst = document.getElementById('pfirst');
+                const osec = document.getElementById('psec');
+                const othird = document.getElementById('pthird');
+                const block_timestamp = await checkIfSigned(addr, fileHash);
+                console.log("block_timestamp:", block_timestamp);
+                
 								if (signInfo) {
-                  //logarea.value += "File Hash: " + docHash + "\n";
-                  logarea.value += "Verifying..." + fileDoc + "\n";
+                  Logout("Verifying..." + fileDoc + "\n");
 									isValid = await verifyMessage({
 											setError,
 											message: docHash,
@@ -93,10 +115,13 @@ export default function VerifyMessage() {
 								}
                 if (isValid) {
                     setSuccessMsg("Signature is valid!");
-                    logarea.value += "Valid. The Signer is: " + addr + "\n";
+                    ofrst.innerHTML = "<b> Hash: " +  fileHash + "</b>";
+                    osec.innerHTML = "Signer: " + addr;
+                    othird.innerHTML = "Date: " +  unixToISOString(timestamp);
+                    Logout("Valid. The Signer is: " + addr + "; fileHash: " + fileHash + "; timestamp: " + timestamp + "\n");
                 } else {
                     setError("Invalid signature");
-                    logarea.value += "Invalid Signature \n";
+                    Logout("Invalid Signature \n");
                 }
             })
     };
@@ -109,11 +134,13 @@ export default function VerifyMessage() {
   	};
 
     return (
-				<div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white border border-primary h-56">
-					<main className="mt-4 p-4">
-						<h1 className="text-xl font-semibold text-gray-700 text-center">
-							Verify Signature
+				<div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white border border-primary h-70">
+					<main className="mt-4 p-2">
+          <center>
+            <h1 className="text-xl font-semibold text-gray-700" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} ref={iconRef}>
+							Verify Signature <FaInfoCircle className="info-icon" onClick={handleShowModal} style={{ marginLeft: '0.5rem', cursor: 'pointer' }} ref={iconRef} />
 						</h1>
+          </center>
 					</main>
 				  <div className="mt-2 p-2">
 						<input className="file-input" type="file"  ref={hiddenFileInputVerify} id="file-selector" onChange={handleVerification} style={{display: 'none'}} />
@@ -121,10 +148,34 @@ export default function VerifyMessage() {
 							Select & Verify
 						</button>
   				</div>
-  				<div className="h-12">
+  				<div className="h-12 m-1 grid content-center">
+            <div>
 						<ErrorMessage message={error} />
 						<SuccessMessage message={successMsg} />
+            </div>
 					</div>
+  				<div className="h-8 m-1 grid content-center">
+            <div>
+						<p id="pfirst"  className="small" ></p>
+            </div>
+					</div>
+  				<div className="h-8 m-1 grid content-center">
+            <div>
+						<p id="psec" className="small" ></p>
+            </div>
+					</div>
+  				<div className="h-7 m-1 grid content-center">
+            <div>
+						<p id="pthird"  className="small"  ></p>
+            </div>
+					</div>
+         {showModal && (
+          <div className="modal-popup" onClick={handleCloseModal}>
+            <div className="popup-content" style={{ position: 'absolute', top: modalPosition.top, left: modalPosition.left, zIndex: 1, backgroundColor: '#fff', padding: '1rem', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', borderRadius: '0.5rem' }}>
+              <p> Verify an already signed archive ("zip"). Just select it and the verification will be done. </p>
+            </div>
+          </div>
+        )}
 				</div>
     );
 }
